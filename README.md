@@ -1,7 +1,7 @@
 # <Video Screen>
 
 ## Description
-<Your-Project-Description>
+<VideoScreen>
 
 ## Features
 - Upload videos to the application.
