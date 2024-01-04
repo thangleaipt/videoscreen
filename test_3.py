@@ -78,6 +78,12 @@ class VideoPlayer(QMainWindow):
             self.mediaPlayer.pause()
         else:
             self.mediaPlayer.play()
+
+    def mediaStatusChanged(self, status):
+        if status == QMediaPlayer.EndOfMedia:
+            # Restart the video when it reaches the end
+            self.mediaPlayer.setPosition(0)
+            self.play()
  
     def mediaStateChanged(self, state):
         if self.mediaPlayer.state() == QMediaPlayer.PlayingState:

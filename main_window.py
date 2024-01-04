@@ -127,6 +127,7 @@ class VideoWindow(QMainWindow):
             player.setVideoOutput(widget_video)
             player.positionChanged.connect(self.update_slider_value)
             player.durationChanged.connect(self.durationChanged)
+            player.mediaStatusChanged.connect(self.mediaStatusChanged)
             self.mediaPlayers.append(player)
             self.videoWidgets.append(widget_video)
             self.positionSliders.append(position_slider)
@@ -145,6 +146,18 @@ class VideoWindow(QMainWindow):
         sender = self.sender()
         index = self.mediaPlayers.index(sender)
         self.positionSliders[index].setValue(position)
+
+    def mediaStatusChanged(self, status):
+        if status == QMediaPlayer.EndOfMedia:
+            # Restart the video when it reaches the end
+            sender = self.sender()
+            index = self.mediaPlayers.index(sender)
+            self.mediaPlayers[index].setPosition(0)
+            self.mediaPlayers[index].play()
+            self.stop_buttons[index].setEnabled(True)
+            duration = self.mediaPlayers[index].duration()
+            self.positionSliders[index].setRange(0, duration)
+            self.mediaPlayers[index].play()
 
     def setPosition(self, position):
         position /= 1000
