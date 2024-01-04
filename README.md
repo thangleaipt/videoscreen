@@ -1,4 +1,4 @@
-# <Video Screen>
+# Video Screen
 
 ## Description
 - Multiple screen of videos
