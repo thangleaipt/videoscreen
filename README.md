@@ -1,7 +1,7 @@
 # <Video Screen>
 
 ## Description
-<VideoScreen>
+- Multiple screen of videos
 
 ## Features
 - Upload videos to the application.
