@@ -16,7 +16,7 @@
 1. Clone the repository:
    ```bash
    git clone https://github.com/thangleaipt/videoscreen.git
-   cd videoscren
+   cd videoscreen
 
 ## Usage
 - python main.py
