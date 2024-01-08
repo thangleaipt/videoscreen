@@ -30,6 +30,9 @@ class LoginWindow(QMainWindow):
         QMainWindow.__init__(self)
         self.ui = Login()
         self.ui.setupUi(self)
+        icon = QIcon()
+        icon.addFile(r"icons\Video_icon-icons.com_76525.png", QSize(), QIcon.Normal, QIcon.Off)
+        self.setWindowIcon(icon)
 
         # REMOVE TITLE BAR
         self.setWindowFlag(Qt.FramelessWindowHint)
@@ -90,11 +93,13 @@ class LoginWindow(QMainWindow):
 
                 if result == QDialog.Accepted:
                     camera_count = camera_dialog.get_camera_count()
-
-                    window = VideoWindow(camera_count)
-                    window.show()
-                    print(f"Số lượng camera: {camera_count}")
-                    camera_dialog.close()
+                    if camera_count > 10:
+                        QMessageBox.warning(self, "Thông báo", f"Số lượng màn hình vượt mức", QMessageBox.Ok)
+                    else:
+                        window = VideoWindow(camera_count)
+                        window.show()
+                        print(f"Số lượng camera: {camera_count}")
+                        camera_dialog.close()
                 else:
                     print("Đã cancel")
         else:
@@ -111,6 +116,9 @@ class CameraDialog(QDialog):
         self.setObjectName(u"dialog_main")
         self.setFixedSize(500, 200)
         self.setWindowTitle("Sô lượng màn hình")
+        icon = QIcon()
+        icon.addFile(r"icons\Video_icon-icons.com_76525.png", QSize(), QIcon.Normal, QIcon.Off)
+        self.setWindowIcon(icon)
         # Tạo các widget
         self.label = QLabel("Số lượng màn hình:")
         self.line_edit = QLineEdit(self)
