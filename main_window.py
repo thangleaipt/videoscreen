@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+import os
 from PySide2.QtCore import QDir, QUrl, Signal, Qt, QTime, QSize
 from PySide2.QtMultimedia import QMediaContent, QMediaPlayer
 from PySide2.QtMultimediaWidgets import QVideoWidget
@@ -26,6 +27,7 @@ class VideoWindow(QMainWindow):
         self.list_openButtons = []
         self.list_frames = []
         self.list_label_duration = []
+        self.list_label_title = []
         self.list_duration_time = {}
         self.setMinimumSize(1280, 720)
         self.setWindowTitle("Video Player")
@@ -100,8 +102,14 @@ class VideoWindow(QMainWindow):
                 "}\n"
                 "\n"
                 "")
+            title_label = QLabel()
+            title_label.setAlignment(Qt.AlignLeft | Qt.AlignTop)
+            title_label.setFixedHeight(0)
+            title_label.setStyleSheet("QLabel {font-weight: bold; color: white;}")
+
             layout_video = QVBoxLayout()
             widget_video = ClickableVideoWidget()
+            layout_video.addWidget(title_label)
             layout_video.addWidget(widget_video)
             position_slider = QSlider(Qt.Horizontal)
             position_slider.setRange(0, 0)  # Set the range initially to 0
@@ -114,11 +122,8 @@ class VideoWindow(QMainWindow):
             self.stop_buttons.append(stopButton) 
             layout_control.addWidget(stopButton)
             layout_control.addWidget(position_slider)
-
-            # openButton = QToolButton(clicked=self.fullScreen)
-            # openButton.setIcon(self.style().standardIcon(QStyle.SP_FileIcon))
-            # self.list_openButtons.append(openButton)
-            # layout_control.addWidget(openButton)
+            
+            # layout_control.addWidget(title_label)
             layout_video.addLayout(layout_control)
 
             frame.setLayout(layout_video)
@@ -131,6 +136,7 @@ class VideoWindow(QMainWindow):
             self.videoWidgets.append(widget_video)
             self.positionSliders.append(position_slider)
             self.list_frames.append(frame)
+            self.list_label_title.append(title_label)
             # self.list_label_duration.append(labelDuration)
             gridLayout.addWidget(frame, i // self.num_col, i % self.num_col, 1, 1)
             def on_widget_clicked(row=i // self.num_col, col=i % self.num_col):
@@ -160,11 +166,10 @@ class VideoWindow(QMainWindow):
             self.mediaPlayers[index].play()
 
     def setPosition(self, position):
-        position /= 1000
         sender = self.sender()
         index = self.positionSliders.index(sender)
         self.mediaPlayers[index].setPosition(position)
-        self.updateDurationInfo(position)
+        # self.updateDurationInfo(position)
     def updateDurationInfo(self, currentInfo):
         index = self.sender().index
         duration = self.list_duration_time[index]
@@ -232,6 +237,9 @@ class VideoWindow(QMainWindow):
                     self.stop_buttons[player_index].setEnabled(True)
                     duration = self.mediaPlayers[player_index].duration()
                     self.positionSliders[player_index].setRange(0, duration)
+                    name_video = os.path.basename(file_path)
+                    self.list_label_title[player_index].setText(name_video)
+                    self.list_label_title[player_index].setFixedHeight(20)
     
 if __name__ == '__main__':
     app = QApplication(sys.argv)
